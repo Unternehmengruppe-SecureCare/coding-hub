@@ -1,0 +1,22 @@
+# Org-Ruleset secret-gate erwartet den Check-Namen "gitleaks" auf der Default-Branch.
+# Kein GITLEAKS_LICENSE — Binary direkt.
+name: gitleaks
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install gitleaks
+        run: |
+          set -euo pipefail
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz" | tar -xz gitleaks
+      - name: Run gitleaks
+        run: ./gitleaks detect --source . --verbose --redact --no-banner

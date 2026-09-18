@@ -6,7 +6,7 @@
 
 1. Auf deinem Rechner: `curl -fsSL https://administrators-revised-finance-interracial.trycloudflare.com/api/couple-all.sh | bash` (Windows: `irm https://administrators-revised-finance-interracial.trycloudflare.com/api/couple-all.ps1 | iex`)
 2. [x.ai/bot](https://x.ai/bot) → Bot **Cursor Dispatch**, Prompt aus dem Hub `/api/grok-bot/files/BOT.md` (Live-MCP-URL, keine Platzhalter)
-3. Marketplace: `grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub`
+3. Marketplace: `grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub || grok plugin marketplace add https://github.com/Unternehmengruppe-SecureCare/coding-hub.git`
 4. Plugin: `grok plugin install coding-hub --trust`
 5. Einschalten: `grok plugin enable coding-hub`
 6. CLI MCP: `grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp`

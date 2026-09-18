@@ -19,6 +19,8 @@ Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden.
 grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 ```
 
+`grok mcp doctor coding-hub` prüft Erreichbarkeit und OAuth. Tunnel-MCP braucht oft `startup_timeout_sec = 60` in `.grok/config.toml`.
+
 5. Danach im Bot: „Zeig den Kopplungsstatus“ — er soll `get_coupling_status` und Resource `coding-hub://catalog` lesen. Routine „Org pollen“ ruft `run_outer_loop_tick` auf.
 
 Ohne Bot-UI, mit API-Key:

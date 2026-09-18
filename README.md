@@ -10,7 +10,7 @@
 ```
 Add this MCP server: https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 Name: coding-hub
-Streamable HTTP, keine Auth.
+Streamable HTTP. OAuth 2.1 macht der Hub (PKCE, keine extra App).
 Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden. Kein Anwendungscode.
 ```
 

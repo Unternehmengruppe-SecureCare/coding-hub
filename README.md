@@ -1,0 +1,22 @@
+# Cursor Dispatch — Grok Plugin
+
+Äußerer Loop für **Unternehmengruppe-SecureCare**. Grok plant, Cursor Cloud Agents schreiben, Claude Code bleibt lokal.
+
+## Grok Bot anlegen
+
+1. [x.ai/bot](https://x.ai/bot) → Bot **Cursor Dispatch**, Prompt aus dem Hub `/api/grok-bot/files/BOT.md` (Live-MCP-URL, keine Platzhalter)
+2. Im Bot chatten:
+
+```
+Add this MCP server: https://administrators-revised-finance-interracial.trycloudflare.com/mcp
+Name: coding-hub
+Streamable HTTP, keine Auth.
+Danach coding-hub://handoff und coding-hub://github-device lesen. Wenn userCode gesetzt: dem Menschen github.com/login/device geben. Dann run_outer_loop_tick. Kein Anwendungscode.
+```
+
+3. Optional: [grok.com/connectors](https://grok.com/connectors) → Custom → `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`
+4. Dieses Repo in Grok öffnen — Skill `cursor-dispatch`, Agent, `.mcp.json`
+
+Ohne Bot-UI: `XAI_API_KEY` plus Hub `POST /api/grok-loop`.
+
+Innerer Loop: GitHub-Issue mit `@cursor` (Cursor GitHub App). Kein User API Key.

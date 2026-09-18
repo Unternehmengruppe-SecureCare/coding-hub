@@ -1,0 +1,5 @@
+{
+  "name": "coding-hub",
+  "version": "0.1.0",
+  "description": "Kompatibilitäts-Spiegel für Grok Bot. Autoritative Manifeste: plugin.json und .cursor-plugin/plugin.json."
+}

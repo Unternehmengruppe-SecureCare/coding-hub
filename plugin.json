@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "coding-hub",
+  "description": "Äußerer Loop für Coding: Grok Bot plant, Cursor Cloud Agents schreiben gegen eine GitHub-Organisation, Claude Code bleibt lokal. MCP coding-hub plus Skill cursor-dispatch.",
+  "version": "0.1.0",
+  "keywords": ["grok-bot", "cursor", "claude-code", "mcp", "github"],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "HUB_PUBLIC_URL": {
+        "type": "string",
+        "title": "Coding Hub HTTPS URL",
+        "description": "Öffentliche Basis-URL ohne Slash, z.B. https://coding-hub.vercel.app. Grok Bot kann localhost nicht erreichen."
+      },
+      "GITHUB_ORG": {
+        "type": "string",
+        "title": "GitHub-Organisation",
+        "description": "Slug der Organisation, deren Repos Cursor übernehmen soll. Default: Unternehmengruppe-SecureCare.",
+        "default": "Unternehmengruppe-SecureCare"
+      }
+    },
+    "required": []
+  }
+}

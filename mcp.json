@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "coding-hub": {
+      "type": "http",
+      "url": "https://administrators-revised-finance-interracial.trycloudflare.com/mcp"
+    }
+  }
+}

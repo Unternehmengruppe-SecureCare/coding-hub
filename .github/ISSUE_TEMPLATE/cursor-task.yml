@@ -1,0 +1,40 @@
+name: Cursor Auftrag
+description: Coding an einen Cursor Cloud Agent auslagern. Label cursor startet den inneren Loop.
+title: "[cursor] "
+labels: ["cursor"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Der äußere Loop (Grok Bot / du) beschreibt den Auftrag. Cursor schreibt den Code und öffnet einen Pull Request.
+        Nach dem Speichern kommentiert die Action `@cursor`. Fehlt die Action: Feld unten nicht löschen — die Cursor GitHub App startet den Cloud Agent.
+  - type: textarea
+    id: mention
+    attributes:
+      label: "@cursor"
+      description: Nicht löschen. Startet den Cloud Agent, wenn die Cursor GitHub App auf der Org sitzt.
+      value: "@cursor Innerer Loop. GitHub ist Source of Truth."
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Auftrag
+      description: Was soll im Repo geändert werden? Akzeptanzkriterien, Tests, was nicht angefasst werden darf.
+      placeholder: Füge einen Health-Check unter GET /health hinzu und decke ihn mit einem Test ab.
+    validations:
+      required: true
+  - type: input
+    id: files
+    attributes:
+      label: Betroffene Pfade
+      placeholder: src/app/api/health/route.ts
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risiko
+      options:
+        - klein (sofort dispatchen)
+        - mittel
+        - hoch (erst nachfragen)
+      default: 0

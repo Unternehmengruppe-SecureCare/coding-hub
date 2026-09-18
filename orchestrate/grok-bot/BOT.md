@@ -52,7 +52,7 @@ Grok Bot braucht für den Hub eine öffentliche HTTPS-URL (Tunnel oder Publish).
 Zuerst CLI (OAuth macht der Hub):
 
 ```
-grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub
+grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub || grok plugin marketplace add https://github.com/Unternehmengruppe-SecureCare/coding-hub.git
 grok plugin install coding-hub --trust
 grok plugin enable coding-hub
 grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp

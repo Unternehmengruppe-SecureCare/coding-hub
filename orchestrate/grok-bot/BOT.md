@@ -49,6 +49,12 @@ Stil
 
 Grok Bot braucht für den Hub eine öffentliche HTTPS-URL (Tunnel oder Publish). `localhost` geht nicht.
 
+Zuerst CLI (OAuth macht der Hub):
+
+```
+grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp
+```
+
 Im Bot chatten:
 
 ```

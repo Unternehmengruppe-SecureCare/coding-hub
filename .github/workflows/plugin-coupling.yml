@@ -1,0 +1,17 @@
+# Prüft, dass das Grok/Cursor-Plugin vollständig und gekoppelt ist.
+name: plugin-coupling
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  plugin-coupling:
+    name: plugin-coupling
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run plugin coupling tests
+        env:
+          SKIP_HUB_ZIP: "1"
+        run: python3 -m unittest discover -s tests -v

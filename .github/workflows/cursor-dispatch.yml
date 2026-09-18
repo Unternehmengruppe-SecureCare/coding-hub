@@ -1,0 +1,229 @@
+# Dispatch labeled GitHub issues to Cursor Cloud Agents.
+# Works without CURSOR_API_KEY: comments @cursor so the Cursor GitHub App starts the inner loop.
+# Optional repo/org secret CURSOR_API_KEY also POSTs https://api.cursor.com/v1/agents.
+name: Cursor inner loop
+
+on:
+  issues:
+    types: [labeled]
+  pull_request:
+    types: [labeled]
+  workflow_call:
+
+jobs:
+  mention-cursor:
+    if: github.event.label.name == 'cursor' || github.event.label.name == 'agent'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Plan outer loop (Grok or template)
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          XAI_MODEL: ${{ secrets.XAI_MODEL }}
+          ISSUE_TITLE: ${{ github.event.issue.title || github.event.pull_request.title }}
+          ISSUE_BODY: ${{ github.event.issue.body || github.event.pull_request.body }}
+          ISSUE_URL: ${{ github.event.issue.html_url || github.event.pull_request.html_url }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          REF: ${{ github.event.repository.default_branch }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, urllib.error, urllib.request
+          title = os.environ.get("ISSUE_TITLE") or ""
+          body = os.environ.get("ISSUE_BODY") or ""
+          url = os.environ.get("ISSUE_URL") or ""
+          repo = os.environ.get("REPO_URL") or ""
+          ref = os.environ.get("REF") or "main"
+          template = "\n".join([
+              "@cursor Innerer Loop. GitHub ist Source of Truth.",
+              "",
+              f"Repository: {repo}",
+              f"Branch: {ref}",
+              f"Issue: {url}",
+              "",
+              title,
+              "",
+              body,
+              "",
+              "Implementiere den Auftrag in diesem Repository, schreibe oder aktualisiere Tests, öffne einen Pull Request. Kein Commit auf die Default-Branch. Kein Claude Code. Kein Direktmerge.",
+          ])
+          mention = template
+          key = os.environ.get("XAI_API_KEY", "").strip()
+          model = os.environ.get("XAI_MODEL", "").strip() or "grok-4.6"
+          system_path = pathlib.Path(".github/cursor-dispatch/SYSTEM.md")
+          system = system_path.read_text() if system_path.exists() else "Du bist Cursor Dispatch. Schreib keinen Code. Ausgabe: GitHub-Kommentar beginnend mit @cursor."
+          if key:
+              payload = {
+                  "model": model,
+                  "messages": [
+                      {"role": "system", "content": system},
+                      {"role": "user", "content": f"Repository: {repo}\nBranch: {ref}\nIssue: {url}\n\n{title}\n\n{body}\n\nSchreibe nur den @cursor-Kommentar. Kein Anwendungscode."},
+                  ],
+              }
+              req = urllib.request.Request(
+                  "https://api.x.ai/v1/chat/completions",
+                  data=json.dumps(payload).encode(),
+                  headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+                  method="POST",
+              )
+              try:
+                  with urllib.request.urlopen(req) as resp:
+                      data = json.loads(resp.read().decode())
+                  text = (((data.get("choices") or [{}])[0].get("message") or {}).get("content") or "").strip()
+                  if text:
+                      if not text.startswith("@cursor"):
+                          text = "@cursor " + text
+                      mention = text
+                      print(f"Outer loop: grok ({model})")
+                  else:
+                      print("Grok leer — Template.")
+              except urllib.error.HTTPError as err:
+                  print(err.read().decode(), file=__import__("sys").stderr)
+                  print("xAI fehlgeschlagen — Template.")
+          else:
+              print("Kein XAI_API_KEY — Template-Outer-Loop.")
+          env_file = os.environ["GITHUB_ENV"]
+          with open(env_file, "a", encoding="utf-8") as handle:
+              handle.write("MENTION<<CURSOR_EOF\n")
+              handle.write(mention)
+              handle.write("\nCURSOR_EOF\n")
+          PY
+      - name: Comment @cursor
+        uses: actions/github-script@v7
+        env:
+          MENTION: ${{ env.MENTION }}
+        with:
+          script: |
+            const issue = context.payload.issue || context.payload.pull_request;
+            if (!issue) return;
+            const existing = `${issue.body || ""}`;
+            if (/\b@cursor\b/i.test(existing)) {
+              core.info("Issue-Body hat bereits @cursor — Cursor GitHub App startet den inneren Loop. Kein zweiter Kommentar.");
+              return;
+            }
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              per_page: 100,
+            });
+            if (comments.data.some((item) => /\b@cursor\b/i.test(item.body || ""))) {
+              core.info("Es gibt schon einen @cursor-Kommentar — kein zweiter Dispatch.");
+              return;
+            }
+            const mention = process.env.MENTION;
+            if (!mention) {
+              core.setFailed("MENTION fehlt");
+              return;
+            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: mention,
+            });
+            core.info(`@cursor posted on #${issue.number}`);
+
+  notify-hub:
+    if: github.event.label.name == 'cursor' || github.event.label.name == 'agent'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forward event to Coding Hub
+        env:
+          HUB_PUBLIC_URL: ${{ secrets.HUB_PUBLIC_URL }}
+          GITHUB_WEBHOOK_SECRET: ${{ secrets.GITHUB_WEBHOOK_SECRET }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, hmac, os, sys, urllib.error, urllib.request
+          hub = os.environ.get("HUB_PUBLIC_URL", "").strip().rstrip("/")
+          if not hub:
+              print("Kein HUB_PUBLIC_URL — Hub-Ingest übersprungen, @cursor-Kommentar reicht.")
+              sys.exit(0)
+          endpoint = hub if hub.endswith("/api/github/webhook") else f"{hub}/api/github/webhook"
+          path = os.environ.get("GITHUB_EVENT_PATH")
+          if not path or not os.path.exists(path):
+              print("GITHUB_EVENT_PATH fehlt.", file=sys.stderr)
+              sys.exit(1)
+          payload = open(path, "rb").read()
+          event = os.environ.get("GITHUB_EVENT_NAME") or "issues"
+          headers = {
+              "Content-Type": "application/json",
+              "X-GitHub-Event": event,
+              "User-Agent": "coding-hub-workflow",
+          }
+          secret = os.environ.get("GITHUB_WEBHOOK_SECRET", "").strip()
+          if secret:
+              digest = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
+              headers["X-Hub-Signature-256"] = f"sha256={digest}"
+          req = urllib.request.Request(
+              endpoint,
+              data=payload,
+              headers=headers,
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  print(resp.read().decode())
+          except urllib.error.HTTPError as err:
+              print(err.read().decode(), file=sys.stderr)
+              sys.exit(1)
+          PY
+
+  api-dispatch:
+    if: github.event.label.name == 'cursor' || github.event.label.name == 'agent'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Start Cursor Cloud Agent via API
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_MODEL_ID: ${{ secrets.CURSOR_MODEL_ID }}
+          ISSUE_TITLE: ${{ github.event.issue.title || github.event.pull_request.title }}
+          ISSUE_BODY: ${{ github.event.issue.body || github.event.pull_request.body }}
+          ISSUE_URL: ${{ github.event.issue.html_url || github.event.pull_request.html_url }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          REF: ${{ github.event.repository.default_branch }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys, urllib.request, base64
+          key = os.environ.get("CURSOR_API_KEY", "").strip()
+          if not key:
+              print("Kein CURSOR_API_KEY — innerer Loop läuft über den @cursor-Kommentar.")
+              sys.exit(0)
+          title = os.environ.get("ISSUE_TITLE") or ""
+          body = os.environ.get("ISSUE_BODY") or ""
+          url = os.environ.get("ISSUE_URL") or ""
+          repo = os.environ.get("REPO_URL") or ""
+          ref = os.environ.get("REF") or "main"
+          model = os.environ.get("CURSOR_MODEL_ID", "").strip()
+          prompt = (
+              "Innerer Loop. GitHub ist Source of Truth.\n\n"
+              f"Issue: {title}\n{url}\n\n{body}\n\n"
+              "Implementiere den Auftrag in diesem Repository, schreibe oder aktualisiere Tests, "
+              "öffne einen Pull Request. Kein Commit auf die Default-Branch."
+          )
+          payload = {
+              "prompt": {"text": prompt},
+              "repos": [{"url": repo, "startingRef": ref}],
+              "autoCreatePR": True,
+          }
+          if model:
+              payload["model"] = {"id": model}
+          req = urllib.request.Request(
+              "https://api.cursor.com/v1/agents",
+              data=json.dumps(payload).encode(),
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          token = base64.b64encode(f"{key}:".encode()).decode()
+          req.add_header("Authorization", f"Basic {token}")
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  print(resp.read().decode())
+          except urllib.error.HTTPError as err:
+              print(err.read().decode(), file=sys.stderr)
+              sys.exit(1)
+          PY

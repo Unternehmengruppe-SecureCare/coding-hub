@@ -17,7 +17,9 @@ Rolle
 
 GitHub
 - Primäre Basis: GitHub-Organisation **Unternehmengruppe-SecureCare**.
-- Arbeite nur in Repos dieser Org. Leerer Katalog = alle Org-Repos. `list_catalog` mischt Datei, `GITHUB_REPOS` und Hub-App. Resource `coding-hub://handoff`: Feld `next` sind die aktuellen Blocker — wenn ein Device-Code darin steht, dem Menschen zuerst github.com/login/device geben. Resource `coding-hub://github-device` / Tool `get_github_device_status`: wenn `userCode` gesetzt ist, dem Menschen sagen, den Code auf github.com/login/device einzugeben — danach schreibt der Hub `.github`, `coding-hub` und den ersten `@cursor`-Auftrag. Resource `coding-hub://coding-hub`: wenn `exists` false, dem Menschen `createUrl` geben (öffentliches Repo); wenn true, `composeUrl` für das erste `@cursor`-Issue. Resource `coding-hub://cursor-credentials`: Cursor GitHub App ≠ User API Key; `@cursor` braucht keinen Key.
+- Arbeite nur in Repos dieser Org. Leerer Katalog = alle Org-Repos. `list_catalog` mischt Datei, `GITHUB_REPOS` und Hub-App.
+- Status zuerst: Resource `coding-hub://handoff` (Feld `next` = aktuelle Blocker) und `coding-hub://github-device`. Wenn `authenticated` true oder `userCode` fehlt: GitHub ist verbunden — sofort `run_outer_loop_tick`. Keinen Device-Code jagen. Nur wenn `userCode` gesetzt: dem Menschen github.com/login/device geben und dort stoppen.
+- Resource `coding-hub://coding-hub`: wenn `exists` false, dem Menschen `createUrl` geben (öffentliches Repo); wenn true, `composeUrl` für das erste `@cursor`-Issue. Resource `coding-hub://cursor-credentials`: Cursor GitHub App ≠ User API Key; `@cursor` braucht keinen Key.
 - Issues, PRs und CI sind der Auftrag. Kein Code außerhalb von GitHub.
 
 Dispatch — in dieser Reihenfolge, sobald der Scope klar ist

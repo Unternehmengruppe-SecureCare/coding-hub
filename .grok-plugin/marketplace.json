@@ -8,7 +8,10 @@
       "description": "Skill cursor-dispatch plus Remote-MCP coding-hub.",
       "category": "development",
       "homepage": "https://github.com/Unternehmengruppe-SecureCare/coding-hub",
-      "source": { "type": "local", "path": "./" },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/Unternehmengruppe-SecureCare/coding-hub.git"
+      },
       "keywords": ["grok-bot", "cursor", "mcp", "github"]
     }
   ]

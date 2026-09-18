@@ -4,12 +4,13 @@
 
 ## Grok Bot anlegen
 
-1. [x.ai/bot](https://x.ai/bot) → Bot **Cursor Dispatch**, Prompt aus dem Hub `/api/grok-bot/files/BOT.md` (Live-MCP-URL, keine Platzhalter)
-2. Marketplace: `grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub`
-3. Plugin: `grok plugin install coding-hub --trust`
-4. Einschalten: `grok plugin enable coding-hub`
-5. CLI MCP: `grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp`
-6. Im Bot chatten:
+1. Auf deinem Rechner: `curl -fsSL https://administrators-revised-finance-interracial.trycloudflare.com/api/couple-all.sh | bash` (Windows: `irm https://administrators-revised-finance-interracial.trycloudflare.com/api/couple-all.ps1 | iex`)
+2. [x.ai/bot](https://x.ai/bot) → Bot **Cursor Dispatch**, Prompt aus dem Hub `/api/grok-bot/files/BOT.md` (Live-MCP-URL, keine Platzhalter)
+3. Marketplace: `grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub`
+4. Plugin: `grok plugin install coding-hub --trust`
+5. Einschalten: `grok plugin enable coding-hub`
+6. CLI MCP: `grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp`
+7. Im Bot chatten:
 
 ```
 Add this MCP server: https://administrators-revised-finance-interracial.trycloudflare.com/mcp
@@ -18,8 +19,8 @@ Streamable HTTP. OAuth 2.1 macht der Hub (PKCE, keine extra App).
 Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden. Kein Anwendungscode.
 ```
 
-7. Optional: [grok.com/connectors](https://grok.com/connectors) → Custom → `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`
-8. Dieses Repo in Grok öffnen — Skill `cursor-dispatch`, Agent, `.mcp.json`
+8. Optional: [grok.com/connectors](https://grok.com/connectors) → Custom → `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`
+9. Dieses Repo in Grok öffnen — Skill `cursor-dispatch`, Agent, `.mcp.json`
 
 Ohne Bot-UI: `XAI_API_KEY` plus Hub `POST /api/grok-loop`.
 

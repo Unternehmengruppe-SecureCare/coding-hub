@@ -63,6 +63,8 @@ HUB_ZIP_FILES = (
     "README.md",
 )
 
+ALLOWED_MCP_REFS = frozenset({"./mcp.json", "./.mcp.json"})
+
 
 def _read(rel: str) -> str:
     path = ROOT / rel
@@ -109,10 +111,15 @@ class PluginCouplingTests(unittest.TestCase):
         self.assertEqual(cursor["author"]["name"], ORG)
         self.assertEqual(cursor["skills"], "./skills/")
         self.assertEqual(cursor["agents"], "./agents/")
-        self.assertEqual(cursor["mcpServers"], "./mcp.json")
+        mcp_ref = cursor["mcpServers"]
+        self.assertIn(mcp_ref, ALLOWED_MCP_REFS, mcp_ref)
+        mcp_path = ROOT / str(mcp_ref).removeprefix("./")
+        self.assertTrue(mcp_path.is_file(), mcp_ref)
+        self.assertIn("coding-hub", (_json(str(mcp_path.relative_to(ROOT))).get("mcpServers") or {}))
         self.assertTrue((ROOT / "skills").is_dir())
         self.assertTrue((ROOT / "agents").is_dir())
         self.assertTrue((ROOT / "mcp.json").is_file())
+        self.assertTrue((ROOT / ".mcp.json").is_file())
 
     def test_grok_plugin_mirror_matches_name(self) -> None:
         grok = _json(".grok-plugin/plugin.json")

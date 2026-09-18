@@ -17,6 +17,22 @@ jobs:
       - name: Install gitleaks
         run: |
           set -euo pipefail
-          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz" | tar -xz gitleaks
+          url="https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz"
+          archive="gitleaks.tgz"
+          for attempt in 1 2 3 4; do
+            if curl --fail --location --retry 3 --retry-delay 2 \
+                 -o "$archive" "$url" \
+              && gzip -t "$archive"; then
+              break
+            fi
+            echo "gitleaks download attempt ${attempt} failed" >&2
+            rm -f "$archive"
+            if [ "$attempt" -eq 4 ]; then
+              echo "could not download a valid gitleaks archive from ${url}" >&2
+              exit 1
+            fi
+            sleep $((attempt * 3))
+          done
+          tar -xzf "$archive" gitleaks
       - name: Run gitleaks
         run: ./gitleaks detect --source . --verbose --redact --no-banner

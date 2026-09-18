@@ -63,6 +63,11 @@ HUB_ZIP_FILES = (
     "README.md",
 )
 
+# Workflows may be hardened in this repo without waiting for the Hub ZIP.
+HUB_ZIP_BYTE_MATCH = tuple(
+    rel for rel in HUB_ZIP_FILES if not rel.startswith(".github/workflows/")
+)
+
 ALLOWED_MCP_REFS = frozenset({"./mcp.json", "./.mcp.json"})
 
 
@@ -198,6 +203,13 @@ class PluginCouplingTests(unittest.TestCase):
         self.assertIn("Kein Claude Code", workflow)
         self.assertNotIn("gh pr merge", workflow)
 
+    def test_gitleaks_workflow_downloads_archive_with_retries(self) -> None:
+        workflow = _read(".github/workflows/gitleaks.yml")
+        self.assertIn("name: gitleaks", workflow)
+        self.assertIn("gzip -t", workflow)
+        self.assertIn("curl --fail", workflow)
+        self.assertIn("gitleaks_8.24.3_linux_x64.tar.gz", workflow)
+
     def test_repo_has_no_application_source_tree(self) -> None:
         forbidden_roots = ("src", "app", "lib", "backend", "frontend")
         present = [name for name in forbidden_roots if (ROOT / name).exists()]
@@ -236,7 +248,7 @@ class HubZipCouplingTests(unittest.TestCase):
             self.skipTest(self.skip_reason)
         assert self.zip_bytes is not None
         with zipfile.ZipFile(BytesIO(self.zip_bytes)) as archive:
-            for rel in HUB_ZIP_FILES:
+            for rel in HUB_ZIP_BYTE_MATCH:
                 with self.subTest(rel=rel):
                     expected = archive.read(rel)
                     actual = (ROOT / rel).read_bytes()

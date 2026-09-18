@@ -17,10 +17,12 @@ Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden.
 
 ```
 grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub
-grok plugin install Unternehmengruppe-SecureCare/coding-hub --trust
+grok plugin install coding-hub --trust
 grok plugin enable coding-hub
 grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 ```
+
+Falls der Katalog den Plugin-Namen nicht kennt: `grok plugin install Unternehmengruppe-SecureCare/coding-hub --trust`.
 
 `grok mcp doctor coding-hub` prüft Erreichbarkeit und OAuth. Tunnel-MCP braucht oft `startup_timeout_sec = 60` in `.grok/config.toml`.
 

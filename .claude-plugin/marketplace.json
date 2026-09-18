@@ -1,0 +1,18 @@
+{
+  "name": "coding-hub",
+  "description": "Äußerer Loop für Unternehmengruppe-SecureCare: Grok plant, Cursor Cloud Agents schreiben, Claude Code bleibt lokal.",
+  "owner": { "name": "Unternehmengruppe-SecureCare" },
+  "plugins": [
+    {
+      "name": "coding-hub",
+      "description": "Skill cursor-dispatch plus Remote-MCP coding-hub.",
+      "category": "development",
+      "homepage": "https://github.com/Unternehmengruppe-SecureCare/coding-hub",
+      "source": {
+        "type": "local",
+        "path": "./plugins/coding-hub"
+      },
+      "keywords": ["grok-bot", "cursor", "mcp", "github"]
+    }
+  ]
+}

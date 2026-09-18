@@ -10,7 +10,7 @@
   "keywords": ["grok-bot", "cursor", "claude-code", "mcp", "github"],
   "skills": "./skills/",
   "agents": "./agents/",
-  "mcpServers": "./mcp.json",
+  "mcpServers": "./.mcp.json",
   "variables": {
     "type": "object",
     "properties": {

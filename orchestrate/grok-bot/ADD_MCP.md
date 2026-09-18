@@ -4,7 +4,7 @@ Grok Bot läuft in der Cloud. `localhost` und `claude mcp serve` funktionieren d
 
 1. HTTPS-URL des Hubs: `https://administrators-revised-finance-interracial.trycloudflare.com` (Tunnel oder Publish). `HUB_PUBLIC_URL` nur setzen, wenn sie noch fehlt.
 2. Pack optional: `npm run install-grok-bot` oder `GET /api/grok-bot`. Live-Dateien: `/api/grok-bot/files/BOT.md`.
-3. Grok Chat (nicht der Bot): [grok.com/connectors](https://grok.com/connectors) → New Connector → Custom → Server URL `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`, Name `coding-hub`. OAuth 2.1 kommt vom Hub (`/.well-known/oauth-authorization-server`, DCR `/register`, PKCE S256) — keine extra App, kein Secret. Wenn Grok ein Formular zeigt: Client ID beliebig, Secret leer, Authorize `/authorize`, Token `/token`, Auth Method none (PKCE). MCP bleibt ohne Pflicht-Bearer erreichbar. Streamable HTTP: `Accept: application/json, text/event-stream` bekommt JSON, `notifications/initialized` antwortet mit `202`.
+3. Grok Chat (nicht der Bot): [grok.com/connectors](https://grok.com/connectors) → New Connector → Custom → Server URL `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`, Name `coding-hub`. OAuth 2.1 kommt vom Hub (`/.well-known/oauth-authorization-server` und `/.well-known/openid-configuration`, DCR `/register`, PKCE S256) — keine extra App, kein Secret. Wenn Grok ein Formular zeigt: Client ID beliebig, Secret leer, Authorize `/authorize`, Token `/token`, Auth Method none (PKCE). MCP bleibt ohne Pflicht-Bearer erreichbar. Streamable HTTP: `Accept: application/json, text/event-stream` bekommt JSON, `notifications/initialized` antwortet mit `202`.
 
 4. Im Grok Bot chatte:
 

@@ -163,8 +163,9 @@ class PluginCouplingTests(unittest.TestCase):
         bot = _read("orchestrate/grok-bot/BOT.md")
         for text, label in ((agent, "agent"), (bot, "bot")):
             with self.subTest(label=label):
-                self.assertIn("Claude Code", text)
-                self.assertIn("keinen Anwendungscode", text.lower())
+                lowered = text.lower()
+                self.assertIn("claude code", lowered)
+                self.assertIn("keinen anwendungscode", lowered)
                 self.assertIn(ORG, text)
                 self.assertIn("@cursor", text)
         self.assertIn("name: cursor-dispatch", agent)

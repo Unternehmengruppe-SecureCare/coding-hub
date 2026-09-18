@@ -4,9 +4,9 @@ In Grok Bot unter Routinen / Triggers anlegen. GitHub-Events brauchen die Cursor
 
 ## GitHub Device-Code
 
-Wenn: Kopplung ohne PAT, `coding-hub` oder `.github` fehlt.
+Wenn: `coding-hub://github-device` hat `userCode` (Kopplung ohne PAT, `coding-hub` oder `.github` fehlt).
 
-Dann: `get_github_device_status` / `coding-hub://github-device` lesen. Wenn `userCode` gesetzt, dem Org-Admin `https://github.com/login/device?user_code=…` geben. Parallel `coding-hub://coding-hub`: `createUrl` wenn das Repo fehlt, `composeUrl` wenn es da ist. Kein Code.
+Dann: dem Org-Admin `https://github.com/login/device?user_code=…` geben. Wenn `authenticated` true oder kein `userCode`: GitHub ist verbunden — diese Routine überspringen und `run_outer_loop_tick`. Keinen Device-Code jagen. Parallel `coding-hub://coding-hub`: `createUrl` wenn das Repo fehlt, `composeUrl` wenn es da ist. Kein Code.
 
 ## Issue → Cursor
 

@@ -6,7 +6,7 @@
 
 1. [x.ai/bot](https://x.ai/bot) → Bot **Cursor Dispatch**, Prompt aus dem Hub `/api/grok-bot/files/BOT.md` (Live-MCP-URL, keine Platzhalter)
 2. Marketplace: `grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub`
-3. Plugin: `grok plugin install Unternehmengruppe-SecureCare/coding-hub --trust`
+3. Plugin: `grok plugin install coding-hub --trust`
 4. Einschalten: `grok plugin enable coding-hub`
 5. CLI MCP: `grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp`
 6. Im Bot chatten:

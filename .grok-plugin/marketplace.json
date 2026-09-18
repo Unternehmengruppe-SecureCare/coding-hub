@@ -9,8 +9,8 @@
       "category": "development",
       "homepage": "https://github.com/Unternehmengruppe-SecureCare/coding-hub",
       "source": {
-        "source": "url",
-        "url": "https://github.com/Unternehmengruppe-SecureCare/coding-hub.git"
+        "type": "local",
+        "path": "./"
       },
       "keywords": ["grok-bot", "cursor", "mcp", "github"]
     }

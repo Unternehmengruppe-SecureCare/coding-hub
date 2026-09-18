@@ -1,0 +1,31 @@
+{
+  "name": "coding-hub",
+  "version": "0.1.0",
+  "description": "Äußerer Loop für Coding: Grok Bot plant, Cursor Cloud Agents schreiben gegen eine GitHub-Organisation, Claude Code bleibt lokal. MCP coding-hub plus Skill cursor-dispatch.",
+  "author": {
+    "name": "Unternehmengruppe-SecureCare"
+  },
+  "homepage": "https://github.com/Unternehmengruppe-SecureCare/coding-hub",
+  "repository": "https://github.com/Unternehmengruppe-SecureCare/coding-hub",
+  "keywords": ["grok-bot", "cursor", "claude-code", "mcp", "github"],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "mcpServers": "./mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "HUB_PUBLIC_URL": {
+        "type": "string",
+        "title": "Coding Hub HTTPS URL",
+        "description": "Öffentliche Basis-URL ohne Slash. Grok Bot kann localhost nicht erreichen."
+      },
+      "GITHUB_ORG": {
+        "type": "string",
+        "title": "GitHub-Organisation",
+        "description": "Slug der Organisation, deren Repos Cursor übernehmen soll. Default: Unternehmengruppe-SecureCare.",
+        "default": "Unternehmengruppe-SecureCare"
+      }
+    },
+    "required": []
+  }
+}

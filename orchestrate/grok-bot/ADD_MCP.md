@@ -16,6 +16,8 @@ Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden.
 ```
 
 ```
+grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub
+grok plugin install Unternehmengruppe-SecureCare/coding-hub --trust
 grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 ```
 

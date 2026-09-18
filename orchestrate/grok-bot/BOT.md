@@ -54,6 +54,7 @@ Zuerst CLI (OAuth macht der Hub):
 ```
 grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub
 grok plugin install Unternehmengruppe-SecureCare/coding-hub --trust
+grok plugin enable coding-hub
 grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 ```
 

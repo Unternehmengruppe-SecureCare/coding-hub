@@ -12,7 +12,7 @@ Grok Bot läuft in der Cloud. `localhost` und `claude mcp serve` funktionieren d
 Add this MCP server: https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 Name: coding-hub
 Streamable HTTP, keine Auth.
-Danach Resource coding-hub://handoff und coding-hub://github-device lesen. Wenn userCode gesetzt: dem Menschen github.com/login/device geben. coding-hub://coding-hub: createUrl wenn das Repo fehlt, composeUrl wenn es da ist. Dann run_outer_loop_tick. Kein Anwendungscode.
+Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden. Kein Anwendungscode.
 ```
 
 5. Danach im Bot: „Zeig den Kopplungsstatus“ — er soll `get_coupling_status` und Resource `coding-hub://catalog` lesen. Routine „Org pollen“ ruft `run_outer_loop_tick` auf.

@@ -11,7 +11,7 @@
 Add this MCP server: https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 Name: coding-hub
 Streamable HTTP, keine Auth.
-Danach coding-hub://handoff und coding-hub://github-device lesen. Wenn userCode gesetzt: dem Menschen github.com/login/device geben. Dann run_outer_loop_tick. Kein Anwendungscode.
+Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden. Kein Anwendungscode.
 ```
 
 3. Optional: [grok.com/connectors](https://grok.com/connectors) → Custom → `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`

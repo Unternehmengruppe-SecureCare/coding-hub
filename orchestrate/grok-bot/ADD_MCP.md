@@ -4,15 +4,19 @@ Grok Bot läuft in der Cloud. `localhost` und `claude mcp serve` funktionieren d
 
 1. HTTPS-URL des Hubs: `https://administrators-revised-finance-interracial.trycloudflare.com` (Tunnel oder Publish). `HUB_PUBLIC_URL` nur setzen, wenn sie noch fehlt.
 2. Pack optional: `npm run install-grok-bot` oder `GET /api/grok-bot`. Live-Dateien: `/api/grok-bot/files/BOT.md`.
-3. Grok Chat (nicht der Bot): [grok.com/connectors](https://grok.com/connectors) → New Connector → Custom → Server URL `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`, Name `coding-hub`. OAuth 2.1 kommt vom Hub (`/.well-known/oauth-authorization-server` und `/.well-known/openid-configuration`, DCR `/register`, PKCE S256) — keine extra App, kein Secret. Wenn Grok ein Formular zeigt: Client ID beliebig, Secret leer, Authorize `/authorize`, Token `/token`, Auth Method none (PKCE). MCP bleibt ohne Pflicht-Bearer erreichbar. Streamable HTTP: `Accept: application/json, text/event-stream` bekommt JSON, `notifications/initialized` antwortet mit `202`.
+3. Grok Chat (nicht der Bot): [grok.com/connectors](https://grok.com/connectors) → New Connector → Custom → Server URL `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`, Name `coding-hub`. OAuth 2.1 kommt vom Hub (`/.well-known/oauth-authorization-server` und `/.well-known/openid-configuration`, DCR `/register`, PKCE S256) — keine extra App, kein Secret. Wenn Grok ein Formular zeigt: Client ID beliebig, Secret leer, Authorize `/authorize`, Token `/token`, Auth Method none (PKCE). MCP bleibt ohne Pflicht-Bearer erreichbar. Streamable HTTP: POST JSON-RPC antwortet JSON (auch wenn Accept nur `text/event-stream` ist — Cloudflare-Quick-Tunnels verwerfen SSE-Bodies). `notifications/initialized` antwortet mit `202`.
 
-4. Im Grok Bot chatte:
+4. Im Grok Bot chatte, oder in der Grok CLI:
 
 ```
 Add this MCP server: https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 Name: coding-hub
 Streamable HTTP. OAuth 2.1 macht der Hub (PKCE, keine extra App).
 Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden. Kein Anwendungscode.
+```
+
+```
+grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp
 ```
 
 5. Danach im Bot: „Zeig den Kopplungsstatus“ — er soll `get_coupling_status` und Resource `coding-hub://catalog` lesen. Routine „Org pollen“ ruft `run_outer_loop_tick` auf.

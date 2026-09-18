@@ -68,8 +68,6 @@ HUB_ZIP_BYTE_MATCH = tuple(
     rel for rel in HUB_ZIP_FILES if not rel.startswith(".github/workflows/")
 )
 
-ALLOWED_MCP_REFS = frozenset({"./mcp.json", "./.mcp.json"})
-
 
 def _read(rel: str) -> str:
     path = ROOT / rel
@@ -83,6 +81,15 @@ def _json(rel: str) -> dict:
 def _mcp_url(config: dict) -> str:
     server = (config.get("mcpServers") or {}).get("coding-hub") or {}
     return str(server.get("url") or "")
+
+
+def _plugin_relative_file(ref: object) -> Path:
+    if not isinstance(ref, str) or not ref.startswith("./") or ".." in Path(ref).parts:
+        raise AssertionError(f"mcpServers muss eine Plugin-relative Datei sein: {ref!r}")
+    path = ROOT / ref[2:]
+    if not path.is_file():
+        raise AssertionError(f"mcpServers zeigt auf fehlende Datei: {ref}")
+    return path
 
 
 class PluginCouplingTests(unittest.TestCase):
@@ -116,11 +123,13 @@ class PluginCouplingTests(unittest.TestCase):
         self.assertEqual(cursor["author"]["name"], ORG)
         self.assertEqual(cursor["skills"], "./skills/")
         self.assertEqual(cursor["agents"], "./agents/")
-        mcp_ref = cursor["mcpServers"]
-        self.assertIn(mcp_ref, ALLOWED_MCP_REFS, mcp_ref)
-        mcp_path = ROOT / str(mcp_ref).removeprefix("./")
-        self.assertTrue(mcp_path.is_file(), mcp_ref)
-        self.assertIn("coding-hub", (_json(str(mcp_path.relative_to(ROOT))).get("mcpServers") or {}))
+        mcp_path = _plugin_relative_file(cursor["mcpServers"])
+        mcp_config = json.loads(mcp_path.read_text(encoding="utf-8"))
+        self.assertIn("coding-hub", mcp_config.get("mcpServers") or {})
+        url = _mcp_url(mcp_config)
+        self.assertTrue(url.startswith("https://"), url)
+        self.assertTrue(url.rstrip("/").endswith("/mcp"), url)
+        self.assertNotIn("localhost", url)
         self.assertTrue((ROOT / "skills").is_dir())
         self.assertTrue((ROOT / "agents").is_dir())
         self.assertTrue((ROOT / "mcp.json").is_file())

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "plugins": {
+    "coding-hub": {
+      "version": "0.1.0",
+      "components": {
+        "mcpServers": [
+          {
+            "name": "coding-hub",
+            "description": "http"
+          }
+        ],
+        "skills": [
+          {
+            "name": "cursor-dispatch",
+            "description": "Äußerer Loop. Plant Coding-Aufträge und lagert sie an Cursor Cloud Agents aus. Schreibt keinen Anwendungscode."
+          }
+        ],
+        "agents": [
+          {
+            "name": "cursor-dispatch",
+            "description": "Äußerer Loop. Plant Coding-Aufträge und lagert sie an Cursor Cloud Agents aus. Schreibt keinen Anwendungscode."
+          }
+        ]
+      }
+    }
+  }
+}

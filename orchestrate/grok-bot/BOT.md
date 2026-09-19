@@ -55,13 +55,13 @@ Zuerst CLI (OAuth macht der Hub):
 grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub || grok plugin marketplace add https://github.com/Unternehmengruppe-SecureCare/coding-hub.git
 grok plugin install coding-hub --trust
 grok plugin enable coding-hub
-grok mcp add --transport http coding-hub https://switching-weed-helmet-assets.trycloudflare.com/mcp
+grok mcp add --transport http coding-hub https://pathology-playlist-bookstore-php.trycloudflare.com/mcp
 ```
 
 Im Bot chatten:
 
 ```
-Add this MCP server: https://switching-weed-helmet-assets.trycloudflare.com/mcp
+Add this MCP server: https://pathology-playlist-bookstore-php.trycloudflare.com/mcp
 Name: coding-hub
 Streamable HTTP. OAuth 2.1 macht der Hub (PKCE, keine extra App).
 Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden. Kein Anwendungscode.

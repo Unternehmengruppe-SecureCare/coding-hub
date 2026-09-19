@@ -2,14 +2,14 @@
 
 Grok Bot läuft in der Cloud. `localhost` und `claude mcp serve` funktionieren dort nicht. Eine öffentliche HTTPS-URL reicht — der laufende Tunnel (`HUB_PUBLIC_URL` / `.data/hub-public-url`) zählt. Vercel/Publish ist nicht Voraussetzung.
 
-1. HTTPS-URL des Hubs: `https://administrators-revised-finance-interracial.trycloudflare.com` (Tunnel oder Publish). `HUB_PUBLIC_URL` nur setzen, wenn sie noch fehlt.
+1. HTTPS-URL des Hubs: `https://switching-weed-helmet-assets.trycloudflare.com` (Tunnel oder Publish). `HUB_PUBLIC_URL` nur setzen, wenn sie noch fehlt.
 2. Pack optional: `npm run install-grok-bot` oder `GET /api/grok-bot`. Live-Dateien: `/api/grok-bot/files/BOT.md`.
-3. Grok Chat (nicht der Bot): [grok.com/connectors](https://grok.com/connectors) → New Connector → Custom → Server URL `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`, Name `coding-hub`. OAuth 2.1 kommt vom Hub (`/.well-known/oauth-authorization-server` und `/.well-known/openid-configuration`, DCR `/register`, PKCE S256, `resource` = `https://administrators-revised-finance-interracial.trycloudflare.com/mcp`) — keine extra App, kein Secret. Wenn Grok ein Formular zeigt: Client ID beliebig, Secret leer, Authorize `/authorize`, Token `/token`, Auth Method none (PKCE). MCP bleibt ohne Pflicht-Bearer erreichbar. Streamable HTTP: POST JSON-RPC antwortet JSON (auch wenn Accept nur `text/event-stream` ist). GET mit Accept `text/event-stream` über den Tunnel ist ein kurzes SSE-Greeting mit Content-Length (kein Open-Stream — Cloudflare-Quick-Tunnels verwerfen offene SSE-Bodies). RPC bleibt POST. `notifications/initialized` antwortet mit `202`.
+3. Grok Chat (nicht der Bot): [grok.com/connectors](https://grok.com/connectors) → New Connector → Custom → Server URL `https://switching-weed-helmet-assets.trycloudflare.com/mcp`, Name `coding-hub`. OAuth 2.1 kommt vom Hub (`/.well-known/oauth-authorization-server` und `/.well-known/openid-configuration`, DCR `/register`, PKCE S256, `resource` = `https://switching-weed-helmet-assets.trycloudflare.com/mcp`) — keine extra App, kein Secret. Wenn Grok ein Formular zeigt: Client ID beliebig, Secret leer, Authorize `/authorize`, Token `/token`, Auth Method none (PKCE). MCP bleibt ohne Pflicht-Bearer erreichbar. Streamable HTTP: POST JSON-RPC antwortet JSON (auch wenn Accept nur `text/event-stream` ist). GET mit Accept `text/event-stream` über den Tunnel ist ein kurzes SSE-Greeting mit Content-Length (kein Open-Stream — Cloudflare-Quick-Tunnels verwerfen offene SSE-Bodies). RPC bleibt POST. `notifications/initialized` antwortet mit `202`.
 
 4. Im Grok Bot chatte, oder in der Grok CLI:
 
 ```
-Add this MCP server: https://administrators-revised-finance-interracial.trycloudflare.com/mcp
+Add this MCP server: https://switching-weed-helmet-assets.trycloudflare.com/mcp
 Name: coding-hub
 Streamable HTTP. OAuth 2.1 macht der Hub (PKCE, keine extra App).
 Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden. Kein Anwendungscode.
@@ -19,7 +19,7 @@ Danach coding-hub://handoff lesen und run_outer_loop_tick. GitHub ist verbunden.
 grok plugin marketplace add Unternehmengruppe-SecureCare/coding-hub || grok plugin marketplace add https://github.com/Unternehmengruppe-SecureCare/coding-hub.git
 grok plugin install coding-hub --trust
 grok plugin enable coding-hub
-grok mcp add --transport http coding-hub https://administrators-revised-finance-interracial.trycloudflare.com/mcp
+grok mcp add --transport http coding-hub https://switching-weed-helmet-assets.trycloudflare.com/mcp
 ```
 
 Falls der Katalog den Plugin-Namen nicht kennt: `grok plugin install Unternehmengruppe-SecureCare/coding-hub --trust`.
@@ -62,6 +62,6 @@ Resources: `coding-hub://catalog`, `coding-hub://status`, `coding-hub://bot-prom
 
 Prompts: `dispatch_issue`, `morning_briefing`, `grok_bot_setup`, `org_tick`, `create_cursor_task`.
 
-GitHub-Org-Webhook (nach Deploy): `https://administrators-revised-finance-interracial.trycloudflare.com/api/github/webhook`, Events `issues` und `pull_request`. Label `cursor` oder `agent` ingestiert den inneren Loop.
+GitHub-Org-Webhook (nach Deploy): `https://switching-weed-helmet-assets.trycloudflare.com/api/github/webhook`, Events `issues` und `pull_request`. Label `cursor` oder `agent` ingestiert den inneren Loop.
 
 Claude Code nicht in den Bot hängen. Der bleibt auf Cursor Desktop.
